@@ -1,0 +1,21 @@
+stages:
+  - build
+  - test
+  - deploy
+
+build:
+  stage: build
+  script:
+    - ./gradlew assembleDebug
+
+test:
+  stage: test
+  script:
+    - ./gradlew testDebug
+
+deploy:
+  stage: deploy
+  script:
+    - ./gradlew assembleRelease
+  only:
+    - master
