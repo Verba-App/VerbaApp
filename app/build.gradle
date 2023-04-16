@@ -22,6 +22,12 @@ android {
     namespace 'ru.nsu.ccfit.verbaapp'
     compileSdk 32
 
+    sourceSets {
+        main {
+            resources.srcDirs += 'src/main/font'
+        }
+    }
+
     defaultConfig {
         applicationId "ru.nsu.ccfit.verbaapp"
         minSdk 26

@@ -1,41 +1,38 @@
 package ru.nsu.ccfit.verbaapp.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
-private val DarkColorPalette = darkColors(
-    primary = Purple200,
-    primaryVariant = Purple700,
-    secondary = Teal200
-)
 
-private val LightColorPalette = lightColors(
-    primary = Purple500,
-    primaryVariant = Purple700,
-    secondary = Teal200
 
-    /* Other default colors to override
-    background = Color.White,
-    surface = Color.White,
-    onPrimary = Color.White,
-    onSecondary = Color.Black,
-    onBackground = Color.Black,
-    onSurface = Color.Black,
-    */
-)
+object VerbaTheme{
+     val DarkColorPalette = darkColors(
+        primary = Purple200,
+        primaryVariant = Purple700,
+        secondary = Teal200
+    )
+
+     val LightColorPalette = lightColors(
+        primary = Color(3, 147, 235, 255),
+        surface = Color.White,
+        background = Color(3, 147, 235, 255),
+        primaryVariant = Purple700,
+        secondary = Teal200,
+        onSecondary = Color.Black,
+        onSurface = Color.Black,
+        )
+}
 
 @Composable
 fun VerbaAppAndroidTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colors = if (darkTheme) {
-        DarkColorPalette
+        VerbaTheme.DarkColorPalette
     } else {
-        LightColorPalette
+        VerbaTheme.LightColorPalette
     }
 
     MaterialTheme(

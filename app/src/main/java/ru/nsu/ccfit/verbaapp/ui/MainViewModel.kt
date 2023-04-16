@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: AuthRepository
-): ViewModel() {
+) : ViewModel() {
 
     var state by mutableStateOf(AuthState())
 
@@ -30,7 +30,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun onEvent(event: AuthUiEvent) {
-        when(event) {
+        when (event) {
             is AuthUiEvent.SignInUsernameChanged -> {
                 state = state.copy(signInUsername = event.value)
             }
@@ -48,6 +48,10 @@ class MainViewModel @Inject constructor(
             }
             is AuthUiEvent.SignUp -> {
                 signUp()
+            }
+            is AuthUiEvent.SignUpEmailChanged -> {
+
+                state = state.copy(signUpEmail = event.value)
             }
         }
     }
