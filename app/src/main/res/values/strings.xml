@@ -1,3 +1,6 @@
 <resources>
-    <string name="app_name">VerbaApp</string>
+    <string name="app_name">Verba</string>
+    <string name="sign_in">Don’t have an account? Sign up!</string>
+    <string name="sign_up">Already have an account? Sign in!</string>
+
 </resources>
