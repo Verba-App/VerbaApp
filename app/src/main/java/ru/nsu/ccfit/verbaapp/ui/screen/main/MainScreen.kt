@@ -13,6 +13,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import androidx.compose.material.Button
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.TextButton
@@ -28,6 +30,7 @@ import ru.nsu.ccfit.verbaapp.ui.component.DefaultAddedMenu
 import ru.nsu.ccfit.verbaapp.ui.component.GroupListView
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.res.painterResource
 
 
 @Composable
@@ -37,14 +40,47 @@ fun MainScreen(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val listGroup = viewModel.listGroup
+
     val dialogCreate = remember {
         mutableStateOf(false)
     }
-    DefaultAddedMenu(R.string.group, onAddEvent = {
-        dialogCreate.value = true
+
+    val filter = remember {
+        mutableStateOf(false)
+    }
+    DefaultAddedMenu(R.string.group,
+        bottomAppBar = {
+            IconButton(onClick = {
+                filter.value = !filter.value
+                viewModel.onEvent(GroupUiEvent.AvalableGroup(filter.value))
+            }) {
+                if (filter.value){
+                    Icon(
+                        painter = painterResource(R.drawable.filter_icon),
+                        contentDescription = "Filter",
+                        tint = Color.White
+                    )
+                }else{
+                    Icon(
+                        painter = painterResource(R.drawable.filter_icon),
+                        contentDescription = "Filter"
+                    )
+                }
+
+            }
+            IconButton(onClick = { viewModel.onEvent(GroupUiEvent.RefreshGroup) }) {
+                Icon(
+                    painter = painterResource(R.drawable.refresh_icon),
+                    contentDescription = "Refresh"
+                )
+            }
+
+        },
+        onAddEvent = {
+            dialogCreate.value = true
 
 
-    }) {
+        }) {
         val context = LocalContext.current
         LaunchedEffect(viewModel, context) {
             viewModel.event.collect { result ->

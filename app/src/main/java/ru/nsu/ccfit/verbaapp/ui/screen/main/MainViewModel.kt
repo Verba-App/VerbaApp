@@ -24,44 +24,60 @@ class MainViewModel @Inject constructor(
     private val resultChannel = Channel<GroupViewModelEvent>()
     val event = resultChannel.receiveAsFlow()
 
+    private var myGroup = false
+
 
     init {
         refreshListGroup()
     }
 
+    private suspend fun updateGroup() {
+        when (val response =
+            if (myGroup) repository.getAllMyGroup() else repository.getAllAvailableGroup()
+        ) {
+            is ViewModelResult.WithData -> {
+                listGroup = response.data as ArrayList<GroupDto>
+            }
+
+            else -> {
+                resultChannel.send(GroupViewModelEvent.Message("Ошибка"))
+            }
+        }
+
+    }
+
     private fun refreshListGroup() =
         viewModelScope.launch {
-
-            when (val response = repository.getAllMyGroup()) {
-                is ViewModelResult.WithData -> {
-                    listGroup = response.data as ArrayList<GroupDto>
-                }
-
-                else -> {
-                    resultChannel.send(GroupViewModelEvent.Message("Ошибка"))
-                }
-            }
+            updateGroup()
         }
 
 
     fun onEvent(event: GroupUiEvent) {
         when (event) {
-            is GroupUiEvent.CreateGroup ->{
+            is GroupUiEvent.CreateGroup -> {
                 addNewGroup(event.name)
-                refreshListGroup()
             }
 
             is GroupUiEvent.DeleteGroup -> {
                 deleteGroup(event.value)
+            }
+
+            is GroupUiEvent.ViewGroup -> {
+                openGroup(event.value)
+            }
+
+            GroupUiEvent.RefreshGroup -> {
                 refreshListGroup()
             }
-            is GroupUiEvent.ViewGroup -> {
-              openGroup(event.value)
+
+            is GroupUiEvent.AvalableGroup -> {
+                myGroup = event.filter
+                refreshListGroup()
             }
         }
     }
 
-    private fun openGroup(value: GroupDto)=  viewModelScope.launch  {
+    private fun openGroup(value: GroupDto) = viewModelScope.launch {
         resultChannel.send(GroupViewModelEvent.OpenGroup(value))
     }
 
@@ -71,7 +87,10 @@ class MainViewModel @Inject constructor(
             when (repository.add(name)) {
                 is ViewModelResult.WithData -> {
                     resultChannel.send(GroupViewModelEvent.Message("Группа $name создана"))
+                    //TODO: Обновление списка
+                    updateGroup()
                 }
+
                 else -> {
                     resultChannel.send(GroupViewModelEvent.Message("Ошибка"))
                 }
@@ -85,7 +104,10 @@ class MainViewModel @Inject constructor(
             when (repository.delete(groupDto.id)) {
                 is ViewModelResult.WithData -> {
                     resultChannel.send(GroupViewModelEvent.Message("Группа ${groupDto.name} удалена"))
+                    //TODO: Обновление списка
+                    updateGroup()
                 }
+
                 else -> {
                     resultChannel.send(GroupViewModelEvent.Message("Ошибка"))
                 }

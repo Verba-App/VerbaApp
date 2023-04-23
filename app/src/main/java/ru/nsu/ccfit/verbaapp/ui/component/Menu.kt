@@ -40,10 +40,6 @@ fun DefaultAddedMenu(@StringRes nameId: Int, onAddEvent: ()->Unit, bottomAppBar 
                 cutoutShape = CircleShape
             ) {
                 bottomAppBar.invoke()
-
-//                IconButton(onClick = {}) {
-//                    Icon(painter = painterResource(R.drawable.filter_icon), contentDescription ="df")
-//                }
             }
         },
         floatingActionButton = {
