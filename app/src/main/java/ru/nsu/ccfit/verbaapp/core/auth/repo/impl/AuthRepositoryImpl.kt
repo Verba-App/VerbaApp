@@ -7,8 +7,9 @@ import ru.nsu.ccfit.verbaapp.api.auth.service.AuthApi
 import ru.nsu.ccfit.verbaapp.core.auth.domen.AuthResult
 import ru.nsu.ccfit.verbaapp.core.auth.repo.AuthRepository
 import ru.nsu.ccfit.verbaapp.api.component.Code
+import javax.inject.Inject
 
-class AuthRepositoryImpl(
+class AuthRepositoryImpl @Inject constructor(
     private val api: AuthApi,
     private val prefs: SharedPreferences
 ) : AuthRepository {

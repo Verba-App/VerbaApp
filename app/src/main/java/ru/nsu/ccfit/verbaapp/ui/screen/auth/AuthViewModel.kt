@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.verbaapp.ui
+package ru.nsu.ccfit.verbaapp.ui.screen.auth
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,11 +12,10 @@ import kotlinx.coroutines.launch
 import ru.nsu.ccfit.verbaapp.core.auth.repo.AuthRepository
 import ru.nsu.ccfit.verbaapp.core.auth.domen.AuthResult
 import ru.nsu.ccfit.verbaapp.core.auth.domen.AuthState
-import ru.nsu.ccfit.verbaapp.core.auth.domen.AuthUiEvent
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
+class AuthViewModel @Inject constructor(
     private val repository: AuthRepository
 ) : ViewModel() {
 

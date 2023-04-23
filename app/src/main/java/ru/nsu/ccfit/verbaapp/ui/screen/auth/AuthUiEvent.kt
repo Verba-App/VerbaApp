@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.verbaapp.core.auth.domen
+package ru.nsu.ccfit.verbaapp.ui.screen.auth
 
 sealed class AuthUiEvent {
     data class SignUpUsernameChanged(val value: String) : AuthUiEvent()
