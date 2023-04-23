@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.verbaapp.ui.screen
+package ru.nsu.ccfit.verbaapp.ui.screen.auth
 
 import kotlinx.coroutines.flow.collect
 import android.widget.Toast
@@ -22,17 +22,15 @@ import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import ru.nsu.ccfit.verbaapp.R
 import ru.nsu.ccfit.verbaapp.core.auth.domen.AuthResult
-import ru.nsu.ccfit.verbaapp.core.auth.domen.AuthUiEvent
-import ru.nsu.ccfit.verbaapp.ui.MainViewModel
-import ru.nsu.ccfit.verbaapp.ui.screen.destinations.AuthScreenDestination
-import ru.nsu.ccfit.verbaapp.ui.screen.destinations.SecretScreenDestination
+import ru.nsu.ccfit.verbaapp.ui.screen.destinations.MainScreenDestination
+
 import ru.nsu.ccfit.verbaapp.ui.theme.screamingGreen
 
 @Composable
 @Destination(start = true)
 fun AuthScreen(
     navigator: DestinationsNavigator,
-    viewModel: MainViewModel = hiltViewModel()
+    viewModel: AuthViewModel = hiltViewModel()
 ) {
     val state = viewModel.state
 
@@ -41,8 +39,8 @@ fun AuthScreen(
         viewModel.authResults.collect { result ->
             when (result) {
                 is AuthResult.Authorized -> {
-                    navigator.navigate(SecretScreenDestination) {
-                        popUpTo(AuthScreenDestination.route) {
+                    navigator.navigate(MainScreenDestination) {
+                        popUpTo(MainScreenDestination.route) {
                             inclusive = true
                         }
                     }
