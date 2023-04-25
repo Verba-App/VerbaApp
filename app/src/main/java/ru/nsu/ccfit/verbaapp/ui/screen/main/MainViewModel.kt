@@ -21,7 +21,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     var listGroup by mutableStateOf(ArrayList<GroupDto>())
-    private val resultChannel = Channel<GroupViewModelEvent>()
+    private val resultChannel = Channel<MainViewModelEvent>()
     val event = resultChannel.receiveAsFlow()
 
     private var myGroup = false
@@ -40,7 +40,7 @@ class MainViewModel @Inject constructor(
             }
 
             else -> {
-                resultChannel.send(GroupViewModelEvent.Message("Ошибка"))
+                resultChannel.send(MainViewModelEvent.Message("Ошибка"))
             }
         }
 
@@ -52,25 +52,25 @@ class MainViewModel @Inject constructor(
         }
 
 
-    fun onEvent(event: GroupUiEvent) {
+    fun onEvent(event: MainUiEvent) {
         when (event) {
-            is GroupUiEvent.CreateGroup -> {
+            is MainUiEvent.CreateMain -> {
                 addNewGroup(event.name)
             }
 
-            is GroupUiEvent.DeleteGroup -> {
+            is MainUiEvent.DeleteMain -> {
                 deleteGroup(event.value)
             }
 
-            is GroupUiEvent.ViewGroup -> {
+            is MainUiEvent.ViewMain -> {
                 openGroup(event.value)
             }
 
-            GroupUiEvent.RefreshGroup -> {
+            MainUiEvent.RefreshMain -> {
                 refreshListGroup()
             }
 
-            is GroupUiEvent.AvalableGroup -> {
+            is MainUiEvent.AvalableMain -> {
                 myGroup = event.filter
                 refreshListGroup()
             }
@@ -78,7 +78,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun openGroup(value: GroupDto) = viewModelScope.launch {
-        resultChannel.send(GroupViewModelEvent.OpenGroup(value))
+        resultChannel.send(MainViewModelEvent.OpenGroup(value))
     }
 
     private fun addNewGroup(name: String) =
@@ -86,13 +86,13 @@ class MainViewModel @Inject constructor(
 
             when (repository.add(name)) {
                 is ViewModelResult.WithData -> {
-                    resultChannel.send(GroupViewModelEvent.Message("Группа $name создана"))
+                    resultChannel.send(MainViewModelEvent.Message("Группа $name создана"))
                     //TODO: Обновление списка
                     updateGroup()
                 }
 
                 else -> {
-                    resultChannel.send(GroupViewModelEvent.Message("Ошибка"))
+                    resultChannel.send(MainViewModelEvent.Message("Ошибка"))
                 }
             }
         }
@@ -103,13 +103,13 @@ class MainViewModel @Inject constructor(
 
             when (repository.delete(groupDto.id)) {
                 is ViewModelResult.WithData -> {
-                    resultChannel.send(GroupViewModelEvent.Message("Группа ${groupDto.name} удалена"))
+                    resultChannel.send(MainViewModelEvent.Message("Группа ${groupDto.name} удалена"))
                     //TODO: Обновление списка
                     updateGroup()
                 }
 
                 else -> {
-                    resultChannel.send(GroupViewModelEvent.Message("Ошибка"))
+                    resultChannel.send(MainViewModelEvent.Message("Ошибка"))
                 }
             }
         }

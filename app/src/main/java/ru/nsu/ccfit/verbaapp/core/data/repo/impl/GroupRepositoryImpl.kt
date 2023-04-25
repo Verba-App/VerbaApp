@@ -46,4 +46,13 @@ class GroupRepositoryImpl(
         }
     }
 
+    override suspend fun get(groupId: Long): ViewModelResult<GroupDto> {
+        val response = service.getGroupById(groupId)
+
+        return when (response.code) {
+            Code.OK -> ViewModelResult.WithData(response.data)
+            else -> ViewModelResult.WithError()
+        }
+    }
+
 }

@@ -1,15 +1,11 @@
 package ru.nsu.ccfit.verbaapp.ui.component
 
-import android.graphics.drawable.Icon
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -27,14 +23,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import ru.nsu.ccfit.verbaapp.R
-import ru.nsu.ccfit.verbaapp.api.data.dto.GroupDto
 
 @Composable
-fun GroupListView(items: List<GroupDto>, onClick: (GroupDto) -> Unit, onDelete: (GroupDto) -> Unit) {
+fun <T> ListView(items: List<T>, onClick: (T) -> Unit, onDelete: (T) -> Unit,context: @Composable (T)->Unit) {
     LazyColumn {
         items(items) { item ->
             var expanded = remember { mutableStateOf(false) }
@@ -42,7 +34,8 @@ fun GroupListView(items: List<GroupDto>, onClick: (GroupDto) -> Unit, onDelete: 
             Card(
                 modifier = Modifier
                     .padding(8.dp)
-                    .fillMaxWidth().clickable { onClick(item) },
+                    .fillMaxWidth()
+                    .clickable { onClick(item) },
 
                 elevation = 4.dp
             ) {
@@ -50,20 +43,7 @@ fun GroupListView(items: List<GroupDto>, onClick: (GroupDto) -> Unit, onDelete: 
                     modifier = Modifier.padding(8.dp)
                 ) {
                     Row(Modifier.weight(5f)) {
-
-                        Image(
-                            painter = painterResource(R.drawable.image_icon),
-                            contentDescription = item.name,
-                            modifier = Modifier
-                                .size(48.dp)
-                                .padding(end = 16.dp),
-                            contentScale = ContentScale.Crop
-                        )
-                        Column{
-                            Text(text = item.name, modifier = Modifier.align( Alignment.CenterHorizontally))
-                        }
-
-
+                        context.invoke(item)
                     }
 
                     Box(Modifier.weight(1f)) {
@@ -78,7 +58,9 @@ fun GroupListView(items: List<GroupDto>, onClick: (GroupDto) -> Unit, onDelete: 
 
                         DropdownMenu(
                             expanded = expanded.value,
-                            modifier = Modifier.width(100.dp).clickable { onDelete.invoke(item) },
+                            modifier = Modifier
+                                .width(100.dp)
+                                .clickable { onDelete.invoke(item) },
                            // offset = DpOffset((-30).dp, 0.dp),
                             onDismissRequest = { expanded.value = false }
                         ) {

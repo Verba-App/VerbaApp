@@ -8,4 +8,5 @@ interface GroupRepository {
    suspend fun delete(id: Long): ViewModelResult<Unit>
    suspend fun getAllMyGroup(): ViewModelResult<List<GroupDto>>
    suspend fun getAllAvailableGroup(): ViewModelResult<List<GroupDto>>
+   suspend fun get(groupId: Long): ViewModelResult<GroupDto>
 }
