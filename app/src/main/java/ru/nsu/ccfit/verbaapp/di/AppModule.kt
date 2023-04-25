@@ -14,8 +14,11 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.nsu.ccfit.verbaapp.api.data.service.CatalogService
 import ru.nsu.ccfit.verbaapp.api.data.service.GroupService
+import ru.nsu.ccfit.verbaapp.core.data.repo.CatalogRepository
 import ru.nsu.ccfit.verbaapp.core.data.repo.GroupRepository
+import ru.nsu.ccfit.verbaapp.core.data.repo.impl.CatalogRepositoryImpl
 import ru.nsu.ccfit.verbaapp.core.data.repo.impl.GroupRepositoryImpl
 import javax.inject.Singleton
 
@@ -91,7 +94,7 @@ object AppModule {
         return AuthRepositoryImpl(api, prefs)
     }
 
-    //Catalog
+    //Group
 
     @Provides
     @Singleton
@@ -110,6 +113,24 @@ object AppModule {
     @Singleton
     fun provideGroupRepository(service: GroupService): GroupRepository {
         return GroupRepositoryImpl(service)
+    }
+
+    //Catalog
+    @Singleton
+    fun provideCatalogServiceProvider(retrofit: Retrofit): CatalogServiceProvider {
+        return CatalogServiceProvider(retrofit)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCatalogService(catalogServiceProvider: CatalogServiceProvider): CatalogService {
+        return catalogServiceProvider.catalogService
+    }
+
+    @Provides
+    @Singleton
+    fun provideCatalogRepository(service: CatalogService): CatalogRepository {
+        return CatalogRepositoryImpl(service)
     }
 
 }

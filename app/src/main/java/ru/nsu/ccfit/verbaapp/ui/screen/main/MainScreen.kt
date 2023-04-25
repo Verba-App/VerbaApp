@@ -1,6 +1,7 @@
 package ru.nsu.ccfit.verbaapp.ui.screen.main
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,10 +28,14 @@ import androidx.compose.ui.window.Dialog
 import kotlinx.coroutines.flow.collect
 import ru.nsu.ccfit.verbaapp.R
 import ru.nsu.ccfit.verbaapp.ui.component.DefaultAddedMenu
-import ru.nsu.ccfit.verbaapp.ui.component.GroupListView
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import ru.nsu.ccfit.verbaapp.api.data.dto.GroupDto
+import ru.nsu.ccfit.verbaapp.ui.component.ListView
 
 
 @Composable
@@ -48,11 +53,12 @@ fun MainScreen(
     val filter = remember {
         mutableStateOf(false)
     }
-    DefaultAddedMenu(R.string.group,
+    DefaultAddedMenu(
+        stringResource(id = R.string.group),
         bottomAppBar = {
             IconButton(onClick = {
                 filter.value = !filter.value
-                viewModel.onEvent(GroupUiEvent.AvalableGroup(filter.value))
+                viewModel.onEvent(MainUiEvent.AvalableMain(filter.value))
             }) {
                 if (filter.value){
                     Icon(
@@ -68,7 +74,7 @@ fun MainScreen(
                 }
 
             }
-            IconButton(onClick = { viewModel.onEvent(GroupUiEvent.RefreshGroup) }) {
+            IconButton(onClick = { viewModel.onEvent(MainUiEvent.RefreshMain) }) {
                 Icon(
                     painter = painterResource(R.drawable.refresh_icon),
                     contentDescription = "Refresh"
@@ -85,7 +91,7 @@ fun MainScreen(
         LaunchedEffect(viewModel, context) {
             viewModel.event.collect { result ->
                 when (result) {
-                    is GroupViewModelEvent.Message -> {
+                    is MainViewModelEvent.Message -> {
                         Toast.makeText(
                             context,
                             result.value,
@@ -93,7 +99,11 @@ fun MainScreen(
                         ).show()
                     }
 
-                    is GroupViewModelEvent.OpenGroup -> TODO("Добавить экран каталогов")
+                    is MainViewModelEvent.OpenGroup -> {
+
+
+                        navigator.navigate("groupScreen/${result.value.id}")
+                    }
                 }
 
             }
@@ -105,15 +115,15 @@ fun MainScreen(
         ) {
 
             GroupListView(listGroup, onClick = {
-                viewModel.onEvent(GroupUiEvent.ViewGroup(it))
+                viewModel.onEvent(MainUiEvent.ViewMain(it))
             }, onDelete = {
-                viewModel.onEvent(GroupUiEvent.DeleteGroup(it))
+                viewModel.onEvent(MainUiEvent.DeleteMain(it))
             })
 
             if (dialogCreate.value) {
                 CreateGroupDialog(onGroupCreated = { name ->
                     viewModel.onEvent(
-                        GroupUiEvent.CreateGroup(
+                        MainUiEvent.CreateMain(
                             name
                         )
                     )
@@ -176,6 +186,24 @@ fun CreateGroupDialog(
                     Text("Create")
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun GroupListView(items: List<GroupDto>, onClick: (GroupDto) -> Unit, onDelete: (GroupDto) -> Unit) {
+
+    ListView(items = items, onClick = onClick , onDelete = onDelete ) {
+        Image(
+            painter = painterResource(R.drawable.image_icon),
+            contentDescription = it.name,
+            modifier = Modifier
+                .size(48.dp)
+                .padding(end = 16.dp),
+            contentScale = ContentScale.Crop
+        )
+        Column{
+            Text(text = it.name, modifier = Modifier.align( Alignment.CenterHorizontally))
         }
     }
 }
