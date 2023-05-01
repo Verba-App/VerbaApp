@@ -11,11 +11,9 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import ru.nsu.ccfit.verbaapp.api.data.dto.CatalogDto
 import ru.nsu.ccfit.verbaapp.api.data.dto.GroupDto
-import ru.nsu.ccfit.verbaapp.core.data.domen.ViewModelResult
+import ru.nsu.ccfit.verbaapp.core.data.domen.ResultApi
 import ru.nsu.ccfit.verbaapp.core.data.repo.CatalogRepository
 import ru.nsu.ccfit.verbaapp.core.data.repo.GroupRepository
-import ru.nsu.ccfit.verbaapp.ui.screen.main.MainUiEvent
-import ru.nsu.ccfit.verbaapp.ui.screen.main.MainViewModelEvent
 import javax.inject.Inject
 
 
@@ -29,7 +27,7 @@ class GroupViewModel @Inject constructor(
 
     var listCatalog by mutableStateOf(ArrayList<CatalogDto>())
 
-    private val resultChannel = Channel<GroupViewModelEvent>()
+    private val resultChannel = Channel<GroupModelEvent>()
     val event = resultChannel.receiveAsFlow()
 
 
@@ -45,17 +43,24 @@ class GroupViewModel @Inject constructor(
 
             is GroupUiEvent.DeleteCatalog -> deleteCatalog(event.value.id)
             GroupUiEvent.RefreshCatalogs -> updateListCatalog()
+            is GroupUiEvent.OpenCatalog -> {
+              openCatalog(event.value)
+            }
         }
+    }
+
+    private fun openCatalog(catalog: CatalogDto) = viewModelScope.launch {
+        resultChannel.send(GroupModelEvent.OpenCatalog(catalog))
     }
 
     private suspend fun updateListCatalogByGroup() {
         when (val response = catalogRepository.getAllByGroup(group.value.id)) {
-            is ViewModelResult.WithData -> {
+            is ResultApi.WithData -> {
                 listCatalog = response.data as ArrayList<CatalogDto>
             }
 
             else -> {
-                resultChannel.send(GroupViewModelEvent.Message("Ошибка"))
+                resultChannel.send(GroupModelEvent.Message("Ошибка"))
             }
         }
     }
@@ -68,15 +73,15 @@ class GroupViewModel @Inject constructor(
     private fun deleteCatalog(id: Long) = viewModelScope.launch {
 
         when (catalogRepository.delete(id)) {
-            is ViewModelResult.WithData -> {
-                resultChannel.send(GroupViewModelEvent.Message("Каталог удален"))
+            is ResultApi.WithData -> {
+                resultChannel.send(GroupModelEvent.Message("Каталог удален"))
                 //TODO: Обновление списка каталогов
                 updateListCatalog()
 
             }
 
             else -> {
-                resultChannel.send(GroupViewModelEvent.Message("Ошибка"))
+                resultChannel.send(GroupModelEvent.Message("Ошибка"))
             }
         }
     }
@@ -84,14 +89,14 @@ class GroupViewModel @Inject constructor(
     private fun createCatalog(name: String, groupId: Long) = viewModelScope.launch {
 
         when (catalogRepository.add(name, groupId)) {
-            is ViewModelResult.WithData -> {
-                resultChannel.send(GroupViewModelEvent.Message("Успешное добавление $name"))
+            is ResultApi.WithData -> {
+                resultChannel.send(GroupModelEvent.Message("Успешное добавление $name"))
                 //TODO: Обновление списка каталогов
                 updateListCatalog()
             }
 
             else -> {
-                resultChannel.send(GroupViewModelEvent.Message("Ошибка"))
+                resultChannel.send(GroupModelEvent.Message("Ошибка"))
             }
         }
     }
@@ -99,14 +104,14 @@ class GroupViewModel @Inject constructor(
     private fun loadGroup(groupId: Long) = viewModelScope.launch {
 
         when (val response = groupRepository.get(groupId)) {
-            is ViewModelResult.WithData -> {
+            is ResultApi.WithData -> {
                 group.value = response.data ?: group.value
                 //TODO: Обновление списка каталогов
                 updateListCatalog()
             }
 
             else -> {
-                resultChannel.send(GroupViewModelEvent.Message("Ошибка"))
+                resultChannel.send(GroupModelEvent.Message("Ошибка"))
             }
         }
     }

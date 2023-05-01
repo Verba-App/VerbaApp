@@ -91,7 +91,7 @@ fun MainScreen(
         LaunchedEffect(viewModel, context) {
             viewModel.event.collect { result ->
                 when (result) {
-                    is MainViewModelEvent.Message -> {
+                    is MainModelEvent.Message -> {
                         Toast.makeText(
                             context,
                             result.value,
@@ -99,7 +99,7 @@ fun MainScreen(
                         ).show()
                     }
 
-                    is MainViewModelEvent.OpenGroup -> {
+                    is MainModelEvent.OpenGroup -> {
 
 
                         navigator.navigate("groupScreen/${result.value.id}")

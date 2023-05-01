@@ -14,12 +14,16 @@ import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import ru.nsu.ccfit.verbaapp.api.data.service.CardService
 import ru.nsu.ccfit.verbaapp.api.data.service.CatalogService
 import ru.nsu.ccfit.verbaapp.api.data.service.GroupService
+import ru.nsu.ccfit.verbaapp.core.data.repo.CardRepository
 import ru.nsu.ccfit.verbaapp.core.data.repo.CatalogRepository
 import ru.nsu.ccfit.verbaapp.core.data.repo.GroupRepository
+import ru.nsu.ccfit.verbaapp.core.data.repo.impl.CardRepositoryImpl
 import ru.nsu.ccfit.verbaapp.core.data.repo.impl.CatalogRepositoryImpl
 import ru.nsu.ccfit.verbaapp.core.data.repo.impl.GroupRepositoryImpl
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -48,11 +52,13 @@ object AppModule {
     @Singleton
     fun provideOkHttpClient(jwtInterceptor: JwtInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
+            .connectTimeout(0, TimeUnit.MILLISECONDS)
+            .readTimeout(0, TimeUnit.MILLISECONDS)
+            .writeTimeout(0, TimeUnit.MILLISECONDS)
             .addInterceptor(jwtInterceptor).addInterceptor { chain ->
                 val request = chain.request()
                 val response = chain.proceed(request)
                 if (response.code() != 200) {
-                    // handle the HTTP 500 error manually
                     response.newBuilder().code(200).build()
                 } else {
                     response
@@ -131,6 +137,25 @@ object AppModule {
     @Singleton
     fun provideCatalogRepository(service: CatalogService): CatalogRepository {
         return CatalogRepositoryImpl(service)
+    }
+
+    //Card
+
+    @Singleton
+    fun provideCardServiceProvider(retrofit: Retrofit): CardServiceProvider {
+        return CardServiceProvider(retrofit)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCardService(cardServiceProvider: CardServiceProvider): CardService {
+        return cardServiceProvider.catalogService
+    }
+
+    @Provides
+    @Singleton
+    fun provideCardRepository(service: CardService): CardRepository {
+        return CardRepositoryImpl(service)
     }
 
 }

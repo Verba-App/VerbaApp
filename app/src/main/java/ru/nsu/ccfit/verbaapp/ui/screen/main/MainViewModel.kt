@@ -10,7 +10,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import ru.nsu.ccfit.verbaapp.api.data.dto.GroupDto
-import ru.nsu.ccfit.verbaapp.core.data.domen.ViewModelResult
+import ru.nsu.ccfit.verbaapp.core.data.domen.ResultApi
 import ru.nsu.ccfit.verbaapp.core.data.repo.GroupRepository
 import javax.inject.Inject
 
@@ -21,7 +21,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     var listGroup by mutableStateOf(ArrayList<GroupDto>())
-    private val resultChannel = Channel<MainViewModelEvent>()
+    private val resultChannel = Channel<MainModelEvent>()
     val event = resultChannel.receiveAsFlow()
 
     private var myGroup = false
@@ -35,12 +35,12 @@ class MainViewModel @Inject constructor(
         when (val response =
             if (myGroup) repository.getAllMyGroup() else repository.getAllAvailableGroup()
         ) {
-            is ViewModelResult.WithData -> {
+            is ResultApi.WithData -> {
                 listGroup = response.data as ArrayList<GroupDto>
             }
 
             else -> {
-                resultChannel.send(MainViewModelEvent.Message("Ошибка"))
+                resultChannel.send(MainModelEvent.Message("Ошибка"))
             }
         }
 
@@ -78,21 +78,21 @@ class MainViewModel @Inject constructor(
     }
 
     private fun openGroup(value: GroupDto) = viewModelScope.launch {
-        resultChannel.send(MainViewModelEvent.OpenGroup(value))
+        resultChannel.send(MainModelEvent.OpenGroup(value))
     }
 
     private fun addNewGroup(name: String) =
         viewModelScope.launch {
 
             when (repository.add(name)) {
-                is ViewModelResult.WithData -> {
-                    resultChannel.send(MainViewModelEvent.Message("Группа $name создана"))
+                is ResultApi.WithData -> {
+                    resultChannel.send(MainModelEvent.Message("Группа $name создана"))
                     //TODO: Обновление списка
                     updateGroup()
                 }
 
                 else -> {
-                    resultChannel.send(MainViewModelEvent.Message("Ошибка"))
+                    resultChannel.send(MainModelEvent.Message("Ошибка"))
                 }
             }
         }
@@ -102,14 +102,14 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
 
             when (repository.delete(groupDto.id)) {
-                is ViewModelResult.WithData -> {
-                    resultChannel.send(MainViewModelEvent.Message("Группа ${groupDto.name} удалена"))
+                is ResultApi.WithData -> {
+                    resultChannel.send(MainModelEvent.Message("Группа ${groupDto.name} удалена"))
                     //TODO: Обновление списка
                     updateGroup()
                 }
 
                 else -> {
-                    resultChannel.send(MainViewModelEvent.Message("Ошибка"))
+                    resultChannel.send(MainModelEvent.Message("Ошибка"))
                 }
             }
         }

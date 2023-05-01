@@ -65,12 +65,16 @@ fun GroupScreen(
         LaunchedEffect(viewModel, context) {
             viewModel.event.collect { result ->
                 when (result) {
-                    is GroupViewModelEvent.Message -> {
+                    is GroupModelEvent.Message -> {
                         Toast.makeText(
                             context,
                             result.value,
                             Toast.LENGTH_LONG
                         ).show()
+                    }
+
+                    is GroupModelEvent.OpenCatalog -> {
+                        navigator.navigate("catalogScreen/${result.value.id}")
                     }
                 }
             }
@@ -83,7 +87,7 @@ fun GroupScreen(
         ) {
 
             CatalogListView(viewModel.listCatalog, onClick = {
-                TODO("Добавить переход к просмотщику каталога")
+               viewModel.onEvent(GroupUiEvent.OpenCatalog(it))
             }, onDelete = {
                 viewModel.onEvent(GroupUiEvent.DeleteCatalog(it))
             })

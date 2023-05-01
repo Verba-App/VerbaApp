@@ -6,5 +6,6 @@ sealed class GroupUiEvent {
     data class LoadGroup(val groupId: Long) : GroupUiEvent()
     data class CreateCatalog(val name: String) : GroupUiEvent()
     data class DeleteCatalog(val value: CatalogDto) : GroupUiEvent()
+    data class OpenCatalog(val value: CatalogDto) : GroupUiEvent()
     object RefreshCatalogs : GroupUiEvent()
 }
