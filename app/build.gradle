@@ -102,4 +102,8 @@ dependencies {
     // Compose Nav Destinations
     implementation 'io.github.raamcosta.compose-destinations:core:1.1.2-beta'
     ksp 'io.github.raamcosta.compose-destinations:ksp:1.1.2-beta'
+
+    //Coin
+    implementation "io.coil-kt:coil-compose:1.4.0"
+    implementation "io.coil-kt:coil:1.4.0"
 }

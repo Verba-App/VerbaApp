@@ -14,11 +14,13 @@ import ru.nsu.ccfit.verbaapp.api.data.dto.CatalogDto
 import ru.nsu.ccfit.verbaapp.core.data.domen.ResultApi
 import ru.nsu.ccfit.verbaapp.core.data.repo.CardRepository
 import ru.nsu.ccfit.verbaapp.core.data.repo.CatalogRepository
+import ru.nsu.ccfit.verbaapp.core.data.repo.DataRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class CatalogViewModel @Inject constructor(
     private val catalogRepository: CatalogRepository,
+    private val dataRepository: DataRepository,
     private val cardRepository: CardRepository
 ) : ViewModel() {
 
@@ -34,7 +36,18 @@ class CatalogViewModel @Inject constructor(
                 loadCatalog(event.catalogId)
                 loadCardByCatalog(event.catalogId)
             }
+
+            is CatalogUiEvent.StudyCatalog -> TODO()
+
+
+            is CatalogUiEvent.CreateCard -> {
+                openCreateCardView(event.catalogId)
+            }
         }
+    }
+
+    private fun openCreateCardView(catalogId: Long) = viewModelScope.launch {
+        resultChannel.send(CatalogModelEvent.OpenCreateCardView(catalogId))
     }
 
     private fun loadCatalog(catalogId: Long) = viewModelScope.launch {
@@ -42,6 +55,7 @@ class CatalogViewModel @Inject constructor(
             is ResultApi.WithData -> {
                 catalog.value = response.data ?: catalog.value
             }
+
             else -> {
                 resultChannel.send(CatalogModelEvent.Message("Ошибка"))
             }
@@ -51,8 +65,9 @@ class CatalogViewModel @Inject constructor(
     private fun loadCardByCatalog(catalogId: Long) = viewModelScope.launch {
         when (val response = cardRepository.getAllCardByCatalog(catalogId)) {
             is ResultApi.WithData -> {
-               cards = response.data as ArrayList<CardDto>
+                cards = response.data as ArrayList<CardDto>
             }
+
             else -> {
                 resultChannel.send(CatalogModelEvent.Message("Ошибка"))
             }

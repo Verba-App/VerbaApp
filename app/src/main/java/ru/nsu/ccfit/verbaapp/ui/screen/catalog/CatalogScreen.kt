@@ -51,7 +51,7 @@ fun CatalogScreen(
     DefaultAddedMenu(
         "Catalog",
         onAddEvent = {
-          TODO("Добавление каточки")
+            viewModel.onEvent(CatalogUiEvent.CreateCard(catalogId))
         }) {
 
         val context = LocalContext.current
@@ -64,6 +64,10 @@ fun CatalogScreen(
                             result.value,
                             Toast.LENGTH_LONG
                         ).show()
+                    }
+
+                    is CatalogModelEvent.OpenCreateCardView -> {
+                        navigator.navigate("createCardScreen/${result.catalogId}")
                     }
                 }
             }
@@ -121,9 +125,9 @@ fun CatalogScreen(
 
 
             CardListView(viewModel.cards, onClick = {
-                //  viewModel.onEvent(GroupUiEvent.OpenCatalog(it))
+                /* TODO: Сделать отработку нажатия на карточку  */
             }, onDelete = {
-                //     viewModel.onEvent(GroupUiEvent.DeleteCatalog(it))
+                /* TODO: Удаление каточки */
             })
 
 
@@ -143,5 +147,3 @@ fun CardListView(
         }
     }
 }
-
-

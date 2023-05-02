@@ -16,12 +16,15 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.nsu.ccfit.verbaapp.api.data.service.CardService
 import ru.nsu.ccfit.verbaapp.api.data.service.CatalogService
+import ru.nsu.ccfit.verbaapp.api.data.service.DataService
 import ru.nsu.ccfit.verbaapp.api.data.service.GroupService
 import ru.nsu.ccfit.verbaapp.core.data.repo.CardRepository
 import ru.nsu.ccfit.verbaapp.core.data.repo.CatalogRepository
+import ru.nsu.ccfit.verbaapp.core.data.repo.DataRepository
 import ru.nsu.ccfit.verbaapp.core.data.repo.GroupRepository
 import ru.nsu.ccfit.verbaapp.core.data.repo.impl.CardRepositoryImpl
 import ru.nsu.ccfit.verbaapp.core.data.repo.impl.CatalogRepositoryImpl
+import ru.nsu.ccfit.verbaapp.core.data.repo.impl.DataRepositoryImpl
 import ru.nsu.ccfit.verbaapp.core.data.repo.impl.GroupRepositoryImpl
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -77,7 +80,6 @@ object AppModule {
             .client(okHttpClient)
             .build()
     }
-
 
 
     //AUTH
@@ -156,6 +158,25 @@ object AppModule {
     @Singleton
     fun provideCardRepository(service: CardService): CardRepository {
         return CardRepositoryImpl(service)
+    }
+
+    //Data
+
+    @Singleton
+    fun provideDataServiceProvider(retrofit: Retrofit): DataServiceProvider {
+        return DataServiceProvider(retrofit)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDataService(dataServiceProvider: DataServiceProvider): DataService {
+        return dataServiceProvider.dataService
+    }
+
+    @Provides
+    @Singleton
+    fun provideDataRepository(service: DataService): DataRepository {
+        return DataRepositoryImpl(service)
     }
 
 }

@@ -16,7 +16,6 @@ val PoppinsFont=
         Font(R.font.poppins_bold, weight = FontWeight.Bold)
     )
 
-
 // Set of Material typography styles to start with
 val Typography = Typography(
     h1=TextStyle(

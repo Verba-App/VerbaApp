@@ -75,8 +75,6 @@ fun <T> ListView(items: List<T>, onClick: (T) -> Unit, onDelete: (T) -> Unit,con
                             }
                         }
                     }
-
-
                 }
             }
         }
