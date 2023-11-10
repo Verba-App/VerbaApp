@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="loginTitle">Sign in</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="signinButton">Sign in</string>
+    <string name="signup">Sign up</string>
+    <string name="forgotPassword">Forgot password?</string>
+    <string name="goBack">Go back</string>
+    <string name="passwordRepeat">Repeat password</string>
+    <string name="createProfile">Create profile.</string>
+    <string name="eachFieldMustBeFilledIn">Each field must be filled in.</string>
+    <string name="thosePasswordsDidntMatch">Those passwords didn’t match.</string>
+
+</resources>

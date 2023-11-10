@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="loginTitle">Вход</string>
+    <string name="login">Логин</string>
+    <string name="password">Пароль</string>
+    <string name="signinButton">Войти</string>
+    <string name="signup">Регистрация</string>
+    <string name="forgotPassword">Забыли пароль?</string>
+    <string name="goBack">Вернуться</string>
+    <string name="passwordRepeat">Повторите пароль</string>
+    <string name="createProfile">Создать аккаунт.</string>
+    <string name="eachFieldMustBeFilledIn">Каждое поле должно быть заполнено.</string>
+    <string name="thosePasswordsDidntMatch">Пароли не совпадают.</string>
+
+</resources>
