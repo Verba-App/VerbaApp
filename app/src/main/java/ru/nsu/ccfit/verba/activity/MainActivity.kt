@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import dagger.hilt.android.AndroidEntryPoint
+import ru.nsu.ccfit.verba.core.designsystem.VerbaAppAndroidTheme
+import ru.nsu.ccfit.verba.navigation.TemplateNaveHost
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -11,6 +13,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+          VerbaAppAndroidTheme {
+               TemplateNaveHost()
+          }
         }
     }
 }

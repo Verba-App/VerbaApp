@@ -6,3 +6,6 @@ plugins {
 android {
     namespace = "ru.nsu.ccfit.verba.feature"
 }
+dependencies {
+    implementation(libs.compose.material3)
+}
