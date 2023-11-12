@@ -1,22 +1,23 @@
 package ru.nsu.ccfit.verba.core.designsystem
 
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 
-object VerbaTheme {
-    val DarkColorPalette = darkColorScheme(
+
+object VerbaTheme{
+    val DarkColorPalette = darkColors(
         primary = Purple200,
+        primaryVariant = Purple700,
         secondary = Teal200
     )
 
-    val LightColorPalette = lightColorScheme(
+    val LightColorPalette = lightColors(
         primary = Color(3, 147, 235, 255),
         surface = Color.White,
         background = Color(3, 147, 235, 255),
+        primaryVariant = Purple700,
         secondary = Teal200,
         onSecondary = Color.Black,
         onSurface = Color.Black,
@@ -35,7 +36,7 @@ fun VerbaAppAndroidTheme(
     }
 
     MaterialTheme(
-        colorScheme = colors,
+        colors = colors,
         typography = Typography,
         shapes = Shapes,
         content = content
