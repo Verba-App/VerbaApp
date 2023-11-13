@@ -34,3 +34,4 @@ include(":core:designsystem")
 include(":core:testing")
 
 include(":core:domen")
+include(":feature:groups")
