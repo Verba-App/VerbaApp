@@ -3,6 +3,7 @@ pluginManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://jitpack.io") }
         gradlePluginPortal()
     }
 }
@@ -12,6 +13,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
@@ -20,6 +22,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
 
 include(":feature:auth")
+include(":feature:common")
 
 include(":core:ui")
 include(":core:model")

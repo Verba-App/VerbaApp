@@ -3,37 +3,44 @@ package ru.nsu.ccfit.verba.feature.auth
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import ru.nsu.ccfit.verba.core.common.VerbaAppEvent
-import ru.nsu.ccfit.verba.core.common.VerbaUiEvent
+import ru.nsu.ccfit.verba.feature.common.VerbaUiEvent
 import ru.nsu.ccfit.verba.domen.SignInResult
 import ru.nsu.ccfit.verba.domen.SignInUseCase
 import ru.nsu.ccfit.verba.domen.SignUpResult
 import ru.nsu.ccfit.verba.domen.SignUpUseCase
+import ru.nsu.ccfit.verba.feature.R
 import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val signInUseCase: SignInUseCase,
     private val signUpUseCase: SignUpUseCase
-) : ViewModel(){
+) : ViewModel() {
 
-    var state by mutableStateOf(AuthState())
+    var dataState by mutableStateOf(AuthState())
+    private val _updateUiState =
+        MutableStateFlow<AuthUiState>(AuthUiState.Nothing)
+    val updateUiState = _updateUiState.asStateFlow()
     fun onEvent(uiEvent: VerbaUiEvent) {
+        _updateUiState.value = AuthUiState.Nothing
         when (uiEvent) {
             is AuthUiEvent.UsernameChanged -> {
-                state = state.copy(username = uiEvent.value)
+                dataState = dataState.copy(username = uiEvent.value)
             }
 
             is AuthUiEvent.PasswordChanged -> {
-                state = state.copy(password = uiEvent.value)
+                dataState = dataState.copy(password = uiEvent.value)
             }
 
             is AuthUiEvent.EmailChanged -> {
-                state = state.copy(email = uiEvent.value)
+                dataState = dataState.copy(email = uiEvent.value)
             }
 
             is AuthUiEvent.SignIn -> {
@@ -48,29 +55,25 @@ class AuthViewModel @Inject constructor(
 
     private fun signUp() {
         viewModelScope.launch {
-            when (signUpUseCase(state.username, state.email, state.password)) {
-                is SignUpResult.Success -> {
-                    TODO("К следующему экрану")
-                }
+            _updateUiState.value =
+                when (signUpUseCase(dataState.username, dataState.email, dataState.password)) {
+                    is SignUpResult.Success -> AuthUiState.SuccessSignUp
 
-                is SignUpResult.NoCorrectData -> TODO()
-                is SignUpResult.UnknownError -> TODO()
-            }
+                    is SignUpResult.NoCorrectData -> AuthUiState.Error(R.string.sign_up_no_correct)
+
+                    is SignUpResult.UnknownError -> AuthUiState.Error(R.string.unknown_error)
+                }
         }
     }
 
     private fun signIn() {
         viewModelScope.launch {
-            when (signInUseCase(state.username, state.password)) {
-                is SignInResult.Authorized -> {
-                    TODO("К следующему экрану")
-                }
+            _updateUiState.value = when (signInUseCase(dataState.username, dataState.password)) {
+                is SignInResult.Authorized -> AuthUiState.SuccessSignIn
 
-                is SignInResult.Unauthorized -> {
-                   // eventChannel.emit(AuthEvent.Failure)
-                }
+                is SignInResult.Unauthorized -> AuthUiState.Error(R.string.sign_in_unauthorized)
 
-                is SignInResult.UnknownError -> TODO("Ошибка")
+                is SignInResult.UnknownError -> AuthUiState.Error(R.string.unknown_error)
             }
         }
     }
@@ -82,9 +85,11 @@ class AuthViewModel @Inject constructor(
         val password: String = "",
     )
 
-    sealed class AuthEvent : VerbaAppEvent {
-        data object Success : AuthEvent()
-        data object Failure : AuthEvent()
+    sealed interface AuthUiState {
+        class Error(val id: Int) : AuthUiState
+        data object SuccessSignIn : AuthUiState
+        data object SuccessSignUp : AuthUiState
+        data object Nothing : AuthUiState
     }
 }
 

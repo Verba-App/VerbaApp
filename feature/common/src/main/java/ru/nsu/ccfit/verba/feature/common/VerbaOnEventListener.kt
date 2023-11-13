@@ -1,8 +1,9 @@
-package ru.nsu.ccfit.verba.core.common
+package ru.nsu.ccfit.verba.feature.common
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+
 
 interface VerbaOnEventListener{
 

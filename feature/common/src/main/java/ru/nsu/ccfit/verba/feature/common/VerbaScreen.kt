@@ -1,7 +1,6 @@
-package ru.nsu.ccfit.verba.core.ui
+package ru.nsu.ccfit.verba.feature.common
 
 import androidx.compose.runtime.Composable
-import ru.nsu.ccfit.verba.core.common.VerbaOnEventListener
 
 @Composable
 fun VerbaScreen(viewModel: VerbaOnEventListener, content: @Composable () -> Unit) {

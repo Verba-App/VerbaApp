@@ -58,6 +58,7 @@ dependencies {
     implementation(projects.core.model)
     implementation(projects.core.common)
 
+    implementation(libs.toast.motion)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.browser)
     implementation(libs.androidx.core.ktx)

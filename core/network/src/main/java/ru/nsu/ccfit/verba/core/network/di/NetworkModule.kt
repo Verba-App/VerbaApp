@@ -35,7 +35,7 @@ class NetworkModule {
                 }
 
                 url {
-                    url("http://192.168.0.249")
+                    url("http://212.233.123.240")
                     port = 8080
                 }
             }
