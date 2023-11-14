@@ -1,6 +1,6 @@
 package ru.nsu.ccfit.verba.core.data.remote
 
-import ru.nsu.ccfit.verba.core.model.Response
+import ru.nsu.ccfit.verba.core.model.dto.Response
 
 interface AuthRepository {
     suspend fun signIn(username: String, password: String): Response<String>

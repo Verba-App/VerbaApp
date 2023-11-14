@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.verba.core.model
+package ru.nsu.ccfit.verba.core.model.dto
 
 import kotlinx.serialization.Serializable
 
@@ -9,7 +9,7 @@ data class Response<R>(
     val data: R?
 )
 
-fun  Response<*>.isSuccess(): Boolean{
+fun Response<*>.isSuccess(): Boolean{
     return code == Code.OK
 }
 fun <R> Response<R>.onSuccess(action: (R) -> Unit): Response<R> {

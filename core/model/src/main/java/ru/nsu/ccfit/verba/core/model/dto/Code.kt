@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.verba.core.model
+package ru.nsu.ccfit.verba.core.model.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

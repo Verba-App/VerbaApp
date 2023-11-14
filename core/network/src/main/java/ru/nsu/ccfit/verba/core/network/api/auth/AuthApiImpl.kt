@@ -6,7 +6,7 @@ import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.contentType
-import ru.nsu.ccfit.verba.core.model.Response
+import ru.nsu.ccfit.verba.core.model.dto.Response
 import ru.nsu.ccfit.verba.core.model.dto.auth.SignInDto
 import ru.nsu.ccfit.verba.core.model.dto.auth.SignUpDto
 import ru.nsu.ccfit.verba.core.network.api.HttpRoute

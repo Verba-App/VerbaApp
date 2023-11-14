@@ -1,7 +1,7 @@
 package ru.nsu.ccfit.verba.core.data.remote.impl
 
 import ru.nsu.ccfit.verba.core.data.remote.AuthRepository
-import ru.nsu.ccfit.verba.core.model.Response
+import ru.nsu.ccfit.verba.core.model.dto.Response
 import ru.nsu.ccfit.verba.core.model.dto.auth.SignInDto
 import ru.nsu.ccfit.verba.core.model.dto.auth.SignUpDto
 import ru.nsu.ccfit.verba.core.network.api.auth.AuthApi

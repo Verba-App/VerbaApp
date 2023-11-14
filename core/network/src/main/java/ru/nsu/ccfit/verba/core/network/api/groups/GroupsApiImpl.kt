@@ -5,7 +5,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
-import ru.nsu.ccfit.verba.core.model.Response
+import ru.nsu.ccfit.verba.core.model.dto.Response
 import ru.nsu.ccfit.verba.core.model.dto.GroupDto
 import ru.nsu.ccfit.verba.core.network.api.HttpRoute
 import javax.inject.Inject

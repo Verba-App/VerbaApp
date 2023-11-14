@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.ContentAlpha
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
@@ -48,7 +46,7 @@ fun AuthScreen(viewModel: AuthViewModel = hiltViewModel(), successAuth: () -> Un
     val uiState by viewModel.updateUiState.collectAsState()
 
     when (val state = uiState) {
-        is AuthViewModel.AuthUiState.Error -> {VerbaErrorToast(context, stringResource(id = state.id))}
+        is AuthViewModel.AuthUiState.Error -> {VerbaErrorToast(context, state.message)}
         is AuthViewModel.AuthUiState.SuccessSignIn -> successAuth.invoke()
         is AuthViewModel.AuthUiState.SuccessSignUp -> VerbaSuccessToast(context, stringResource(R.string.sign_in))
         is AuthViewModel.AuthUiState.Nothing -> Unit

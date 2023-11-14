@@ -5,7 +5,9 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import ru.nsu.ccfit.verba.core.data.remote.AuthRepository
+import ru.nsu.ccfit.verba.core.data.remote.GroupRepository
 import ru.nsu.ccfit.verba.core.data.remote.impl.AuthRepositoryImpl
+import ru.nsu.ccfit.verba.core.data.remote.impl.GroupRepositoryImpl
 import javax.inject.Singleton
 
 @Module
@@ -15,4 +17,8 @@ interface DataModule {
     @Binds
     @Singleton
     fun bindAuthRepository(impl: AuthRepositoryImpl): AuthRepository
+
+    @Binds
+    @Singleton
+    fun bindGroupRepository(impl: GroupRepositoryImpl): GroupRepository
 }

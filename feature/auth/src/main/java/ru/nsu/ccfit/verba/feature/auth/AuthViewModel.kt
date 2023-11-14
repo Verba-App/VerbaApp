@@ -3,19 +3,16 @@ package ru.nsu.ccfit.verba.feature.auth
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import ru.nsu.ccfit.verba.core.model.Result
+import ru.nsu.ccfit.verba.domen.auth.SignInUseCase
+import ru.nsu.ccfit.verba.domen.auth.SignUpUseCase
 import ru.nsu.ccfit.verba.feature.common.VerbaUiEvent
-import ru.nsu.ccfit.verba.domen.SignInResult
-import ru.nsu.ccfit.verba.domen.SignInUseCase
-import ru.nsu.ccfit.verba.domen.SignUpResult
-import ru.nsu.ccfit.verba.domen.SignUpUseCase
-import ru.nsu.ccfit.verba.feature.R
 import javax.inject.Inject
 
 @HiltViewModel
@@ -56,24 +53,18 @@ class AuthViewModel @Inject constructor(
     private fun signUp() {
         viewModelScope.launch {
             _updateUiState.value =
-                when (signUpUseCase(dataState.username, dataState.email, dataState.password)) {
-                    is SignUpResult.Success -> AuthUiState.SuccessSignUp
-
-                    is SignUpResult.NoCorrectData -> AuthUiState.Error(R.string.sign_up_no_correct)
-
-                    is SignUpResult.UnknownError -> AuthUiState.Error(R.string.unknown_error)
+                when (val r  = signUpUseCase(dataState.username, dataState.email, dataState.password)) {
+                    is Result.Success -> AuthUiState.SuccessSignUp
+                    is Result.Error -> AuthUiState.Error(r.message)
                 }
         }
     }
 
     private fun signIn() {
         viewModelScope.launch {
-            _updateUiState.value = when (signInUseCase(dataState.username, dataState.password)) {
-                is SignInResult.Authorized -> AuthUiState.SuccessSignIn
-
-                is SignInResult.Unauthorized -> AuthUiState.Error(R.string.sign_in_unauthorized)
-
-                is SignInResult.UnknownError -> AuthUiState.Error(R.string.unknown_error)
+            _updateUiState.value = when (val r = signInUseCase(dataState.username, dataState.password)) {
+                is Result.Error -> AuthUiState.Error(r.message)
+                is Result.Success -> AuthUiState.SuccessSignIn
             }
         }
     }
@@ -86,7 +77,7 @@ class AuthViewModel @Inject constructor(
     )
 
     sealed interface AuthUiState {
-        class Error(val id: Int) : AuthUiState
+        class Error(val message: String) : AuthUiState
         data object SuccessSignIn : AuthUiState
         data object SuccessSignUp : AuthUiState
         data object Nothing : AuthUiState
