@@ -1,7 +1,7 @@
 package ru.nsu.ccfit.verba.core.network.api
 
 object HttpRoute {
-    private const val api = ""
+    private const val api = "api"
 
 
     //Auth

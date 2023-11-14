@@ -71,9 +71,9 @@ class AuthViewModel @Inject constructor(
 
     data class AuthState(
         val isLoading: Boolean = false,
-        val username: String = "",
+        val username: String = "rodkot",
         val email: String = "",
-        val password: String = "",
+        val password: String = "rodkot",
     )
 
     sealed interface AuthUiState {

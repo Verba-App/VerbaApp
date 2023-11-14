@@ -19,6 +19,8 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 import ru.nsu.ccfit.verba.core.network.api.auth.AuthApi
 import ru.nsu.ccfit.verba.core.network.api.auth.AuthApiImpl
+import ru.nsu.ccfit.verba.core.network.api.groups.GroupsApi
+import ru.nsu.ccfit.verba.core.network.api.groups.GroupsApiImpl
 import javax.inject.Singleton
 
 @Module
@@ -73,4 +75,8 @@ class NetworkModule {
     @Singleton
     @Provides
     fun getAuthApiImpl(impl: AuthApiImpl): AuthApi = impl
+
+    @Singleton
+    @Provides
+    fun getGroupsApiImpl(impl: GroupsApiImpl): GroupsApi = impl
 }

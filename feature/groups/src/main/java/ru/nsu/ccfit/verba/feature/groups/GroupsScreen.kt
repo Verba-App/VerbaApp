@@ -36,22 +36,32 @@ import ru.nsu.ccfit.verba.core.ui.group.GroupListView
 
 
 @Composable
-fun GroupsScreen(viewModel: GroupsViewModel = hiltViewModel(), chooseGroup: (group: Group) -> Unit) {
+fun GroupsScreen(
+    viewModel: GroupsViewModel = hiltViewModel(),
+    chooseGroup: (group: Group) -> Unit
+) {
     val context = LocalContext.current
 
     val uiState by viewModel.updateUiState.collectAsState()
-    val dataState = viewModel.dataState
+    val dataState by remember {
+        viewModel.dataState
+    }
 
     val dialogCreate = remember {
         mutableStateOf(false)
     }
 
     when (val state = uiState) {
-        is GroupsViewModel.GroupsUiState.Error -> VerbaErrorToast(context,"Error")
+        is GroupsViewModel.GroupsUiState.Error -> VerbaErrorToast(context, "Error")
         GroupsViewModel.GroupsUiState.Nothing -> Unit
         is GroupsViewModel.GroupsUiState.OpenGroup -> chooseGroup(state.group)
-        GroupsViewModel.GroupsUiState.SuccessCreateGroup -> VerbaSuccessToast(context,"SuccessCreateGroup")
-        GroupsViewModel.GroupsUiState.SuccessDeleteGroup -> VerbaSuccessToast(context,"SuccessDeleteGroup")
+        GroupsViewModel.GroupsUiState.SuccessCreateGroup -> {
+            VerbaSuccessToast(context, "SuccessCreateGroup")
+        }
+
+        GroupsViewModel.GroupsUiState.SuccessDeleteGroup -> {
+            VerbaSuccessToast(context, "SuccessDeleteGroup")
+        }
     }
 
     DefaultAddedMenu(
@@ -70,11 +80,15 @@ fun GroupsScreen(viewModel: GroupsViewModel = hiltViewModel(), chooseGroup: (gro
                 .background(Color.White)
         ) {
 
-            GroupListView(dataState.groups, defaultPicture = painterResource(R.drawable.image_icon), onClick = {
-                viewModel.onEvent(GroupsUiEvent.ChooseGroup(it))
-            }, onDelete = {
-                viewModel.onEvent(GroupsUiEvent.DeleteGroup(it))
-            })
+            GroupListView(
+                dataState.groups,
+                defaultPicture = painterResource(R.drawable.image_icon),
+                onClick = {
+                    viewModel.onEvent(GroupsUiEvent.ChooseGroup(it))
+                },
+                onDelete = {
+                    viewModel.onEvent(GroupsUiEvent.DeleteGroup(it))
+                })
 
             if (dialogCreate.value) {
                 CreateGroupDialog(onGroupCreated = { name ->
@@ -89,9 +103,6 @@ fun GroupsScreen(viewModel: GroupsViewModel = hiltViewModel(), chooseGroup: (gro
 
         }
     }
-
-
-
 
 
 }
@@ -151,8 +162,9 @@ fun CreateGroupDialog(
     }
 }
 
-sealed class GroupsUiEvent{
+sealed class GroupsUiEvent {
     data class CreateGroup(val name: String) : GroupsUiEvent()
+    data object UpdateListGroups : GroupsUiEvent()
     data class DeleteGroup(val value: Group) : GroupsUiEvent()
     data class ChooseGroup(val value: Group) : GroupsUiEvent()
 }

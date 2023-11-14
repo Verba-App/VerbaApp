@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.Color
 
 
 
-object VerbaTheme{
+object VerbaAppTheme{
     val DarkColorPalette = darkColors(
         primary = Purple200,
         primaryVariant = Purple700,
@@ -30,9 +30,9 @@ fun VerbaAppAndroidTheme(
     content: @Composable () -> Unit
 ) {
     val colors = if (darkTheme) {
-        VerbaTheme.DarkColorPalette
+        VerbaAppTheme.DarkColorPalette
     } else {
-        VerbaTheme.LightColorPalette
+        VerbaAppTheme.LightColorPalette
     }
 
     MaterialTheme(

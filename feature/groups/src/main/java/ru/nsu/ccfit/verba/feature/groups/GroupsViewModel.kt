@@ -1,8 +1,6 @@
 package ru.nsu.ccfit.verba.feature.groups
 
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +21,7 @@ class GroupsViewModel @Inject constructor(
     val getAllGroupsUserUseCase: GetAllGroupsUserUseCase
 ) : ViewModel() {
 
-    var dataState by mutableStateOf(GroupsState())
+    var dataState = mutableStateOf(GroupsState())
     private val _updateUiState =
         MutableStateFlow<GroupsUiState>(GroupsUiState.Nothing)
     val updateUiState = _updateUiState.asStateFlow()
@@ -35,25 +33,41 @@ class GroupsViewModel @Inject constructor(
     fun onEvent(event: GroupsUiEvent) {
         _updateUiState.value = GroupsUiState.Nothing
         when (event) {
-            is GroupsUiEvent.ChooseGroup -> _updateUiState.value = GroupsUiState.OpenGroup(event.value)
-            is GroupsUiEvent.CreateGroup -> createGroup(event.name)
-            is GroupsUiEvent.DeleteGroup -> deleteGroup(event.value)
+            is GroupsUiEvent.ChooseGroup -> _updateUiState.value =
+                GroupsUiState.OpenGroup(event.value)
+
+            is GroupsUiEvent.CreateGroup -> {
+                createGroup(event.name)
+            }
+
+            is GroupsUiEvent.UpdateListGroups -> {
+                getAllGroup()
+            }
+
+            is GroupsUiEvent.DeleteGroup -> {
+                deleteGroup(event.value)
+            }
         }
     }
 
-    private fun getAllGroup() =
-        viewModelScope.launch {
-            when (val result = getAllGroupsUserUseCase()) {
-                is Result.Error -> GroupsUiState.Error(result.message)
-                is Result.Success -> {
-                    dataState.groups = result.data
-                }
+    private suspend fun refreshGroup() {
+        when (val result = getAllGroupsUserUseCase()) {
+            is Result.Error -> GroupsUiState.Error(result.message)
+            is Result.Success -> {
+                dataState.value.groups = result.data
             }
         }
+    }
+
+    private fun getAllGroup() = viewModelScope.launch {
+        refreshGroup()
+    }
 
     private fun createGroup(name: String) =
         viewModelScope.launch {
-            _updateUiState.value = when (val result = createGroupUseCase(name)) {
+            val result = createGroupUseCase(name)
+            refreshGroup()
+            _updateUiState.value = when (result) {
                 is Result.Error -> GroupsUiState.Error(result.message)
                 is Result.Success -> GroupsUiState.SuccessCreateGroup
             }
@@ -62,7 +76,9 @@ class GroupsViewModel @Inject constructor(
 
     private fun deleteGroup(group: Group) =
         viewModelScope.launch {
-            _updateUiState.value = when (val result = deleteGroupUseCase(group)) {
+            val result = deleteGroupUseCase(group)
+            refreshGroup()
+            _updateUiState.value = when (result) {
                 is Result.Error -> GroupsUiState.Error(result.message)
                 is Result.Success -> GroupsUiState.SuccessCreateGroup
             }
