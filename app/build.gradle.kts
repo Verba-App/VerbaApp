@@ -40,6 +40,7 @@ android {
 dependencies {
     implementation(projects.feature.auth)
     implementation(projects.feature.groups)
+    implementation(projects.feature.detailsgroup)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)

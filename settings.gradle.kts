@@ -23,6 +23,8 @@ include(":app")
 
 include(":feature:auth")
 include(":feature:common")
+include(":feature:groups")
+include(":feature:detailsgroup")
 
 include(":core:ui")
 include(":core:model")
@@ -30,8 +32,5 @@ include(":core:data")
 include(":core:common")
 include(":core:network")
 include(":core:designsystem")
-
 include(":core:testing")
-
 include(":core:domen")
-include(":feature:groups")
