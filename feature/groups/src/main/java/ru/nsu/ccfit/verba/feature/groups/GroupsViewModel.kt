@@ -87,16 +87,6 @@ class GroupsViewModel @Inject constructor(
                 }
                 .onError { GroupsUiState.Error(it) }
         }
-
-    data class GroupsState(
-        var groups: List<Group> = ArrayList()
-    )
-
-    sealed interface GroupsUiState {
-        data object SuccessDeleteGroup : GroupsUiState
-        data object SuccessCreateGroup : GroupsUiState
-        class Error(val message: String) : GroupsUiState
-    }
 }
 
 

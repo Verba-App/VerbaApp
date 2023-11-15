@@ -10,6 +10,5 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.common)
     implementation(libs.androidx.compose.material)
 }

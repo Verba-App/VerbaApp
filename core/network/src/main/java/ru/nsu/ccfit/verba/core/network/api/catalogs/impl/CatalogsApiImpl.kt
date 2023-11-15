@@ -2,6 +2,7 @@ package ru.nsu.ccfit.verba.core.network.api.catalogs.impl
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
 import ru.nsu.ccfit.verba.core.model.dto.CatalogDto
@@ -33,7 +34,7 @@ class CatalogsApiImpl @Inject constructor(
     }
 
     override suspend fun getAllCatalogByGroup(groupId: Long): Response<List<CatalogDto>> {
-        return httpClient.post(HttpRoute.getAllCatalogByGroup(groupId)) {
+        return httpClient.get(HttpRoute.getAllCatalogByGroup(groupId)) {
         }.body()
     }
 }

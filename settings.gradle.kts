@@ -22,7 +22,6 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":app")
 
 include(":feature:auth")
-include(":feature:common")
 include(":feature:groups")
 include(":feature:detailsgroup")
 

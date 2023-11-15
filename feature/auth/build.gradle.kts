@@ -7,6 +7,5 @@ android {
     namespace = "ru.nsu.ccfit.verba.feature"
 }
 dependencies {
-    implementation(projects.feature.common)
     implementation(libs.androidx.compose.material)
 }
