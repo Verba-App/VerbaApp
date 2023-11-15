@@ -16,8 +16,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -38,38 +37,29 @@ import ru.nsu.ccfit.verba.core.ui.group.GroupListView
 @Composable
 fun GroupsScreen(
     viewModel: GroupsViewModel = hiltViewModel(),
-    chooseGroup: (group: Group) -> Unit
+    chooseGroup: (groupId: Long) -> Unit
 ) {
     val context = LocalContext.current
 
-    val uiState by viewModel.updateUiState.collectAsState()
-    val dataState by remember {
+    val dataState =
         viewModel.dataState
-    }
 
     val dialogCreate = remember {
         mutableStateOf(false)
     }
 
-    when (val state = uiState) {
-        is GroupsViewModel.GroupsUiState.Error -> VerbaErrorToast(context, "Error")
-        GroupsViewModel.GroupsUiState.Nothing -> Unit
-        is GroupsViewModel.GroupsUiState.OpenGroup -> chooseGroup(state.group)
-        GroupsViewModel.GroupsUiState.SuccessCreateGroup -> {
-            VerbaSuccessToast(context, "SuccessCreateGroup")
-        }
-
-        GroupsViewModel.GroupsUiState.SuccessDeleteGroup -> {
-            VerbaSuccessToast(context, "SuccessDeleteGroup")
+    LaunchedEffect(viewModel, context) {
+        viewModel.stateUi.collect { result ->
+            when (result) {
+                is GroupsViewModel.GroupsUiState.Error -> VerbaErrorToast(context, result.message)
+                GroupsViewModel.GroupsUiState.SuccessCreateGroup -> VerbaSuccessToast(context, "SuccessCreateGroup")
+                GroupsViewModel.GroupsUiState.SuccessDeleteGroup -> VerbaSuccessToast(context, "SuccessDeleteGroup")
+            }
         }
     }
 
     DefaultAddedMenu(
         stringResource(id = R.string.groups),
-        bottomAppBar = {
-
-
-        },
         onAddEvent = {
             dialogCreate.value = true
         }) {
@@ -84,7 +74,7 @@ fun GroupsScreen(
                 dataState.groups,
                 defaultPicture = painterResource(R.drawable.image_icon),
                 onClick = {
-                    viewModel.onEvent(GroupsUiEvent.ChooseGroup(it))
+                    chooseGroup.invoke(it.id)
                 },
                 onDelete = {
                     viewModel.onEvent(GroupsUiEvent.DeleteGroup(it))
@@ -166,5 +156,5 @@ sealed class GroupsUiEvent {
     data class CreateGroup(val name: String) : GroupsUiEvent()
     data object UpdateListGroups : GroupsUiEvent()
     data class DeleteGroup(val value: Group) : GroupsUiEvent()
-    data class ChooseGroup(val value: Group) : GroupsUiEvent()
+    // data class ChooseGroup(val value: Group) : GroupsUiEvent()
 }

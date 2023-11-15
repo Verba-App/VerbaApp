@@ -20,7 +20,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,14 +43,29 @@ import ru.nsu.ccfit.verba.feature.R
 fun AuthScreen(viewModel: AuthViewModel = hiltViewModel(), successAuth: () -> Unit) {
     val context = LocalContext.current
 
-    val uiState by viewModel.updateUiState.collectAsState()
+//    when (val state = uiState) {
+//        is AuthViewModel.AuthUiState.Error -> {VerbaErrorToast(context, state.message)}
+//        is AuthViewModel.AuthUiState.SuccessSignIn -> successAuth.invoke()
+//        is AuthViewModel.AuthUiState.SuccessSignUp -> VerbaSuccessToast(context, stringResource(R.string.sign_in))
+//        is AuthViewModel.AuthUiState.Nothing -> Unit
+//    }
+    LaunchedEffect(viewModel, context) {
+        viewModel.stateUi.collect { result ->
+            when (result) {
+                is AuthViewModel.AuthUiState.Error -> {
+                    VerbaErrorToast(context, result.message)
+                }
 
-    when (val state = uiState) {
-        is AuthViewModel.AuthUiState.Error -> {VerbaErrorToast(context, state.message)}
-        is AuthViewModel.AuthUiState.SuccessSignIn -> successAuth.invoke()
-        is AuthViewModel.AuthUiState.SuccessSignUp -> VerbaSuccessToast(context, stringResource(R.string.sign_in))
-        is AuthViewModel.AuthUiState.Nothing -> Unit
+                is AuthViewModel.AuthUiState.SuccessSignIn -> successAuth.invoke()
+                is AuthViewModel.AuthUiState.SuccessSignUp -> VerbaSuccessToast(
+                    context, context.getString(R.string.sign_in)
+                )
+
+                is AuthViewModel.AuthUiState.Nothing -> Unit
+            }
+        }
     }
+
 
     AuthBlock(dataState = viewModel.dataState, onEvent = { viewModel.onEvent(it) })
 

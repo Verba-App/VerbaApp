@@ -6,14 +6,14 @@ sealed class Result<out T> {
 
 }
 
-fun <T> Result<T>.onSuccess(action: (T) -> Unit) : Result<T> {
+suspend fun <T> Result<T>.onSuccess(action: suspend (T) -> Unit): Result<T> {
     if (this is Result.Success) {
         action(data)
     }
     return this
 }
 
-fun Result<*>.onError(action: (String) -> Unit) : Result<*>{
+suspend fun Result<*>.onError(action: suspend (String) -> Unit): Result<*> {
     if (this is Result.Error) {
         action(message)
     }

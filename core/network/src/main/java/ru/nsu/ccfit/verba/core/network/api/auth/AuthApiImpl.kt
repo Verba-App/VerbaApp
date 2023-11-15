@@ -32,7 +32,7 @@ class AuthApiImpl @Inject constructor(
     }
 
     override suspend fun authenticate(token: String): Response<Unit> {
-        return httpClient.post(HttpRoute.signIn) {
+        return httpClient.post(HttpRoute.authenticate) {
             parameter("token", token)
         }.body()
     }

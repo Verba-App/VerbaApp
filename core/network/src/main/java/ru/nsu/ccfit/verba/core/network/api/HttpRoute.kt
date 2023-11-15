@@ -13,7 +13,7 @@ object HttpRoute {
         "$auth/register"
 
     const val authenticate =
-        "$auth/register"
+        "$auth/authenticate"
 
     //Groups
     private const val group = "group"

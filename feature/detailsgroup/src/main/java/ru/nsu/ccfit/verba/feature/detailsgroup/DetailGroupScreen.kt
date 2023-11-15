@@ -1,5 +1,6 @@
 package ru.nsu.ccfit.verba.feature.detailsgroup
 
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -11,5 +12,5 @@ fun DetailGroupScreen(
     chooseCatalog: (catalog: Catalog) -> Unit
 ) {
     val context = LocalContext.current
-
+Text(text = "hello")
 }

@@ -1,14 +1,17 @@
 package ru.nsu.ccfit.verba.feature.groups
 
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import ru.nsu.ccfit.verba.core.model.Group
-import ru.nsu.ccfit.verba.core.model.Result
+import ru.nsu.ccfit.verba.core.model.onError
+import ru.nsu.ccfit.verba.core.model.onSuccess
 import ru.nsu.ccfit.verba.domen.group.CreateGroupUseCase
 import ru.nsu.ccfit.verba.domen.group.DeleteGroupUseCase
 import ru.nsu.ccfit.verba.domen.group.GetAllGroupsUserUseCase
@@ -21,20 +24,20 @@ class GroupsViewModel @Inject constructor(
     val getAllGroupsUserUseCase: GetAllGroupsUserUseCase
 ) : ViewModel() {
 
-    var dataState = mutableStateOf(GroupsState())
-    private val _updateUiState =
-        MutableStateFlow<GroupsUiState>(GroupsUiState.Nothing)
-    val updateUiState = _updateUiState.asStateFlow()
+    var dataState by mutableStateOf(GroupsState())
+
+    private val stateUiChannel = Channel<GroupsUiState>()
+    val stateUi = stateUiChannel.receiveAsFlow()
+
 
     init {
         getAllGroup()
     }
 
     fun onEvent(event: GroupsUiEvent) {
-        _updateUiState.value = GroupsUiState.Nothing
         when (event) {
-            is GroupsUiEvent.ChooseGroup -> _updateUiState.value =
-                GroupsUiState.OpenGroup(event.value)
+//            is GroupsUiEvent.ChooseGroup -> _updateUiState.value =
+//                GroupsUiState.OpenGroup(event.value)
 
             is GroupsUiEvent.CreateGroup -> {
                 createGroup(event.name)
@@ -51,13 +54,11 @@ class GroupsViewModel @Inject constructor(
     }
 
     private suspend fun refreshGroup() {
-        when (val result = getAllGroupsUserUseCase()) {
-            is Result.Error -> GroupsUiState.Error(result.message)
-            is Result.Success -> {
-                dataState.value.groups = result.data
-            }
-        }
+        getAllGroupsUserUseCase()
+            .onSuccess { dataState = dataState.copy(groups = it) }
+            .onError { stateUiChannel.send(GroupsUiState.Error(it)) }
     }
+
 
     private fun getAllGroup() = viewModelScope.launch {
         refreshGroup()
@@ -66,11 +67,12 @@ class GroupsViewModel @Inject constructor(
     private fun createGroup(name: String) =
         viewModelScope.launch {
             val result = createGroupUseCase(name)
-            refreshGroup()
-            _updateUiState.value = when (result) {
-                is Result.Error -> GroupsUiState.Error(result.message)
-                is Result.Success -> GroupsUiState.SuccessCreateGroup
-            }
+            result
+                .onSuccess {
+                    refreshGroup()
+                    stateUiChannel.send(GroupsUiState.SuccessCreateGroup)
+                }
+                .onError { stateUiChannel.send(GroupsUiState.Error(it)) }
         }
 
 
@@ -78,10 +80,12 @@ class GroupsViewModel @Inject constructor(
         viewModelScope.launch {
             val result = deleteGroupUseCase(group)
             refreshGroup()
-            _updateUiState.value = when (result) {
-                is Result.Error -> GroupsUiState.Error(result.message)
-                is Result.Success -> GroupsUiState.SuccessCreateGroup
-            }
+            result
+                .onSuccess {
+                    refreshGroup()
+                    stateUiChannel.send(GroupsUiState.SuccessDeleteGroup)
+                }
+                .onError { GroupsUiState.Error(it) }
         }
 
     data class GroupsState(
@@ -91,9 +95,7 @@ class GroupsViewModel @Inject constructor(
     sealed interface GroupsUiState {
         data object SuccessDeleteGroup : GroupsUiState
         data object SuccessCreateGroup : GroupsUiState
-        class OpenGroup(val group: Group) : GroupsUiState
         class Error(val message: String) : GroupsUiState
-        data object Nothing : GroupsUiState
     }
 }
 
