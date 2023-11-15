@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Verba</string>
+    <string name="sign_in" translatable="false">Don’t have an account? Sign up!</string>
+    <string name="sign_up" translatable="false">Already have an account? Sign in!</string>
+    <string name="sign_up_no_correct" translatable="false">No correct information</string>
+    <string name="unknown_error" translatable="false">Unknown Error</string>
+    <string name="sign_in_unauthorized" translatable="false">Password or login not correct</string>
+
+</resources>

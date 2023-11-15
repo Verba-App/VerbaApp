@@ -2,8 +2,9 @@
 <resources>
 
     <style name="Theme.VerbaApp" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">@color/purple_700</item>
+
         <item name="android:windowNoTitle">true</item>
-<!--        <item name="android:windowFullscreen">true</item>-->
+        <item name="android:statusBarColor">@color/icon_background</item>
+        <item name="android:navigationBarColor">@color/icon_gray_background</item>
     </style>
 </resources>
