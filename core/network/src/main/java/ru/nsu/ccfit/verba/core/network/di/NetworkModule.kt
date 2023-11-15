@@ -18,9 +18,11 @@ import io.ktor.serialization.kotlinx.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 import ru.nsu.ccfit.verba.core.network.api.auth.AuthApi
-import ru.nsu.ccfit.verba.core.network.api.auth.AuthApiImpl
+import ru.nsu.ccfit.verba.core.network.api.auth.impl.AuthApiImpl
+import ru.nsu.ccfit.verba.core.network.api.catalogs.CatalogsApi
+import ru.nsu.ccfit.verba.core.network.api.catalogs.impl.CatalogsApiImpl
 import ru.nsu.ccfit.verba.core.network.api.groups.GroupsApi
-import ru.nsu.ccfit.verba.core.network.api.groups.GroupsApiImpl
+import ru.nsu.ccfit.verba.core.network.api.groups.impl.GroupsApiImpl
 import javax.inject.Singleton
 
 @Module
@@ -79,4 +81,8 @@ class NetworkModule {
     @Singleton
     @Provides
     fun getGroupsApiImpl(impl: GroupsApiImpl): GroupsApi = impl
+
+    @Singleton
+    @Provides
+    fun getCatalogsApiImpl(impl: CatalogsApiImpl): CatalogsApi = impl
 }

@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.verba.core.network.api.auth
+package ru.nsu.ccfit.verba.core.network.api.auth.impl
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -10,6 +10,7 @@ import ru.nsu.ccfit.verba.core.model.dto.Response
 import ru.nsu.ccfit.verba.core.model.dto.auth.SignInDto
 import ru.nsu.ccfit.verba.core.model.dto.auth.SignUpDto
 import ru.nsu.ccfit.verba.core.network.api.HttpRoute
+import ru.nsu.ccfit.verba.core.network.api.auth.AuthApi
 import javax.inject.Inject
 import javax.inject.Singleton
 

@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.verba.core.network.api.groups
+package ru.nsu.ccfit.verba.core.network.api.groups.impl
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -8,13 +8,14 @@ import io.ktor.client.request.post
 import ru.nsu.ccfit.verba.core.model.dto.Response
 import ru.nsu.ccfit.verba.core.model.dto.GroupDto
 import ru.nsu.ccfit.verba.core.network.api.HttpRoute
+import ru.nsu.ccfit.verba.core.network.api.groups.GroupsApi
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class GroupsApiImpl @Inject constructor(
 private val httpClient: HttpClient,
-) : GroupsApi  {
+) : GroupsApi {
     override suspend fun getGroupById(id: Long): Response<GroupDto> {
         return httpClient.get(HttpRoute.getGroupById(id)) {
         }.body()

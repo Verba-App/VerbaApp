@@ -29,4 +29,18 @@ object HttpRoute {
 
     const val getAllAvailableGroups= "$api/$group/all/available"
 
+    //Catalogs
+    private const val catalog = "catalog"
+
+    const val createCatalog = "$api/$catalog/create"
+
+    fun deleteCatalog(id:Long) =
+        "$api/$catalog/delete/$id"
+    fun getCatalog(id:Long) =
+        "$api/$catalog/$id"
+    fun getAllCatalogByGroup(id:Long) =
+        "$api/$catalog/all/group/$id"
+
+
+
 }
