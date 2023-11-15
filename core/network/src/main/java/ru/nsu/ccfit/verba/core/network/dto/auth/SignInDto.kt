@@ -1,4 +1,4 @@
-package ru.nsu.ccfit.verba.core.model.dto.auth
+package ru.nsu.ccfit.verba.core.network.dto.auth
 
 import kotlinx.serialization.Serializable
 

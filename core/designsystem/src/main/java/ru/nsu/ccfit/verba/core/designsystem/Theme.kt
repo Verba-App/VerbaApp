@@ -14,9 +14,9 @@ object VerbaAppTheme{
     )
 
     val LightColorPalette = lightColors(
-        primary = Color(3, 147, 235, 255),
+        primary = Color(3, 148, 235, 255),
         surface = Color.White,
-        background = Color(3, 147, 235, 255),
+        background = Color(3, 148, 235, 255),
         primaryVariant = Purple700,
         secondary = Teal200,
         onSecondary = Color.Black,

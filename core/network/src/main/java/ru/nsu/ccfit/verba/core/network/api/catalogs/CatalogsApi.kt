@@ -1,7 +1,7 @@
 package ru.nsu.ccfit.verba.core.network.api.catalogs
 
-import ru.nsu.ccfit.verba.core.model.dto.CatalogDto
-import ru.nsu.ccfit.verba.core.model.dto.Response
+import ru.nsu.ccfit.verba.core.network.dto.CatalogDto
+import ru.nsu.ccfit.verba.core.network.dto.Response
 
 interface CatalogsApi {
     suspend fun createCatalog(name: String, groupId: Long) : Response<Unit>

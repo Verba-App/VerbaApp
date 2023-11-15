@@ -46,6 +46,8 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.window.manager)
+    implementation(libs.accompanist.systemuicontroller)
 
     androidTestImplementation(projects.core.testing)
     testImplementation(projects.core.testing)

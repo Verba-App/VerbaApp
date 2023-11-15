@@ -225,7 +225,7 @@ fun MyButton(name: String, onClick: () -> Unit) {
     }
 }
 
-sealed class AuthUiEvent : ru.nsu.ccfit.verba.feature.common.VerbaUiEvent {
+sealed class AuthUiEvent {
     data class UsernameChanged(val value: String) : AuthUiEvent()
     data class EmailChanged(val value: String) : AuthUiEvent()
     data class PasswordChanged(val value: String) : AuthUiEvent()

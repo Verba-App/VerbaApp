@@ -5,10 +5,10 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
-import ru.nsu.ccfit.verba.core.model.dto.Response
-import ru.nsu.ccfit.verba.core.model.dto.GroupDto
+import ru.nsu.ccfit.verba.core.network.dto.Response
 import ru.nsu.ccfit.verba.core.network.api.HttpRoute
 import ru.nsu.ccfit.verba.core.network.api.groups.GroupsApi
+import ru.nsu.ccfit.verba.core.network.dto.GroupDto
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,13 +21,13 @@ private val httpClient: HttpClient,
         }.body()
     }
 
-    override suspend fun createGroup(name: String): Response<Void> {
+    override suspend fun createGroup(name: String): Response<Unit> {
         return httpClient.post(HttpRoute.createGroup) {
             parameter("name",name)
         }.body()
     }
 
-    override suspend fun deleteGroup(id: Long): Response<Void> {
+    override suspend fun deleteGroup(id: Long): Response<Unit> {
         return httpClient.post(HttpRoute.deleteGroup(id)) {
         }.body()
     }

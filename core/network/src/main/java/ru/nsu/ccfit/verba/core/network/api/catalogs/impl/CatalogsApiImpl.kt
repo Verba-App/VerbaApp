@@ -5,10 +5,10 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
 import io.ktor.client.request.post
-import ru.nsu.ccfit.verba.core.model.dto.CatalogDto
-import ru.nsu.ccfit.verba.core.model.dto.Response
 import ru.nsu.ccfit.verba.core.network.api.HttpRoute
 import ru.nsu.ccfit.verba.core.network.api.catalogs.CatalogsApi
+import ru.nsu.ccfit.verba.core.network.dto.CatalogDto
+import ru.nsu.ccfit.verba.core.network.dto.Response
 import javax.inject.Inject
 import javax.inject.Singleton
 

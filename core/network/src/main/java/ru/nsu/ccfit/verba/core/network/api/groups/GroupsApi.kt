@@ -1,7 +1,7 @@
 package ru.nsu.ccfit.verba.core.network.api.groups
 
-import ru.nsu.ccfit.verba.core.model.dto.Response
-import ru.nsu.ccfit.verba.core.model.dto.GroupDto
+import ru.nsu.ccfit.verba.core.network.dto.GroupDto
+import ru.nsu.ccfit.verba.core.network.dto.Response
 
 interface GroupsApi {
 
@@ -10,12 +10,12 @@ interface GroupsApi {
 
     suspend fun createGroup(
         name: String
-    ): Response<Void>
+    ): Response<Unit>
 
 
     suspend fun deleteGroup(
      id: Long
-    ): Response<Void>
+    ): Response<Unit>
 
 
     suspend fun getAllGroupsByUser(

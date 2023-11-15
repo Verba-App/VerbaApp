@@ -13,12 +13,11 @@
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.VerbaApp"
-        tools:targetApi="31">
+        android:theme="@style/Theme.VerbaApp">
         <activity
             android:name=".activity.MainActivity"
             android:exported="true"
-            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.VerbaApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

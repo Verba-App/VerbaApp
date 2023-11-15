@@ -1,22 +1,22 @@
 package ru.nsu.ccfit.verba.core.data.remote
 
-import ru.nsu.ccfit.verba.core.model.dto.Response
-import ru.nsu.ccfit.verba.core.model.dto.GroupDto
+import ru.nsu.ccfit.verba.core.model.Group
+import ru.nsu.ccfit.verba.core.model.Result
 
 interface GroupRepository {
-    suspend fun getGroupById(id: Long): Response<GroupDto>
+    suspend fun getGroupById(id: Long): Result<Group>
 
     suspend fun createGroup(
         name: String
-    ): Response<Void>
+    ): Result<Unit>
 
 
     suspend fun deleteGroup(
         id: Long
-    ): Response<Void>
+    ): Result<Unit>
 
 
     suspend fun getAllGroupsByUser(
-    ): Response<List<GroupDto>>
+    ): Result<List<Group>>
 
 }

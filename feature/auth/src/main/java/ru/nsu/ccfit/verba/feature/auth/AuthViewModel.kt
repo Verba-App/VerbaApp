@@ -14,7 +14,6 @@ import ru.nsu.ccfit.verba.core.model.onSuccess
 import ru.nsu.ccfit.verba.domen.auth.AuthorizationUseCase
 import ru.nsu.ccfit.verba.domen.auth.SignInUseCase
 import ru.nsu.ccfit.verba.domen.auth.SignUpUseCase
-import ru.nsu.ccfit.verba.feature.common.VerbaUiEvent
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,7 +32,7 @@ class AuthViewModel @Inject constructor(
         authenticate()
     }
 
-    fun onEvent(uiEvent: VerbaUiEvent) {
+    fun onEvent(uiEvent: AuthUiEvent) {
 
         when (uiEvent) {
             is AuthUiEvent.UsernameChanged -> {
