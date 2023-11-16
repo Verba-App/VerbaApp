@@ -29,6 +29,15 @@ Verba - это клиент-серверное приложение для ви�
 [Модули core](/core/README.md)  
 [Модули feature](/feature/README.md)
 
+## Библиотеки
+Основной стек:
+- Kotlin
+- Jetpack Compose
+- Ktor 
+- Hilt 
+
+Остальные библиотеки и их версии в [Конфигурационном файле](/gradle/libs.versions.toml)
+
 ## UseCases
 
 [Ссылка на Miro](https://miro.com/app/board/uXjVMeAQjCg=/?share_link_id=479259400433)
