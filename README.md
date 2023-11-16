@@ -39,4 +39,4 @@ Verba - это клиент-серверное приложение для ви�
   <source src="image/video.mp4" type="video/mp4">
 </video>
 
-[![download_apk](https://static.tildacdn.com/tild3932-6239-4336-a430-373961616430/android_xvision2.png)](app/build/outputs/apk/prod/release/app-prod-release-unsigned.apk)
+[![download_apk](https://static.tildacdn.com/tild3932-6239-4336-a430-373961616430/android_xvision2.png)](https://drive.google.com/file/d/1iz539N1V-1ckcyxlL898sbKxcPrn_V8D/view?usp=sharing)
